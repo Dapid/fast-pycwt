@@ -8,9 +8,10 @@ Created on 9 Oct 2013
 from __future__ import division
 
 import numpy as np
+from numpy import pi
 cimport numpy as np
 
-from libc.math cimport sqrt, exp, sin, cos
+from libc.math cimport sqrt, exp, sin, cos, pow
 
 cimport cython
 
@@ -29,12 +30,12 @@ ctypedef Py_ssize_t index_t
 # Input data. Could be float or double.
 ctypedef fused data_t:
     np.float32_t                # FIXME: TypeError: No matching signature found
-    np.float64_t                # if input is float32.
+    np.float64_t                # if inputs have different dtype.
 # ---------------------------
 
 cdef inline DTYPEC_t morlet_i_c(double t, float W0):
     '''Complete inlined Morlet transform.'''
-    return morlet_i(t, W0) - exp(-0.5 * (t * t) - 0.5 * W0 * W0)
+    return pow(pi, -0.25) * (morlet_i(t, W0) - exp(-0.5 * (t * t) - 0.5 * W0 * W0))
 
 cdef inline DTYPEC_t morlet_i(double t, float W0):
     '''Incomplete inlined Morlet transform.'''
