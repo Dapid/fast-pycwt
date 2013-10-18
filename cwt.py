@@ -70,6 +70,11 @@ def wavel_W(signal, wavel, scales):
     return cwt(signal, wvl, scales)
 
 
+# ======================================================================
+#    From this point forward, all are convenience functions based 
+#                            on wavel_W
+# ======================================================================
+
 def move_integral(arr, window):
     '''Perform the integration over a window. The input is padded with 0s
     before and after. The output keeps the same shape as the input.
