@@ -8,7 +8,7 @@ Interface to obtain wavelet transforms and other measurements.
 from __future__ import division
 
 import numpy as np
-from _cwt import _mwt
+from _cwt import _mwt, _rwt
 
 WINDOW = 100
 
@@ -58,6 +58,26 @@ def mwt(x, scales):
     return _mwt(x, scales)
 
 
+def rwt(x, scales):
+    '''Perform Morlet wavelet transform
+
+    Input:
+    -----
+        x : 1-D np.ndarray, float32 or float64. The data to be transformed.
+        scales: 1-D np.ndarray, float32 or float64. Scales at which to perform
+             the transformation. If it is not one of the valid types, it will
+             be safely casted.
+
+    Returns:
+    -------
+        out : the cwt of the x input.
+    '''
+    if scales.dtype is not x.dtype:
+        return _rwt(x.astype(np.float64, casting='same_kind'),
+                    scales.astype(np.float64, casting='same_kind'))
+    return _rwt(x, scales)
+
+
 def wavel_W(signal, wavel, scales):
     '''Compute wavelet W transform.
 
@@ -67,6 +87,7 @@ def wavel_W(signal, wavel, scales):
     '''
     wvl = wavel_by_name[wavel]
     if wvl is morlet: return mwt(signal, scales)
+    if wvl is ricker: return rwt(signal, scales)
     return cwt(signal, wvl, scales)
 
 
