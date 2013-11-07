@@ -13,4 +13,5 @@ works to the precision I need. The code is not as clean as it
 could be, and I don't know how much time I could put to develop
 this further. No no promises here!
 
-If this is of any use to you, please, feel free to fork.
+If this is of any use to you, please, feel free to fork and let
+me know, I may be able to help.
