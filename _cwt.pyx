@@ -76,7 +76,7 @@ cpdef _mwt(np.ndarray[data_t, ndim=1] x, np.ndarray[data_t, ndim=1] scales):
         float W0 = 2.
         index_t i, tau, k
         DTYPEC_t integral_sum
-        int kminus, k_plus
+        int kminus, k_plus, int_s
 
     # Defining the output file.
     cdef np.ndarray[DTYPEC_t, ndim = 2] out = np.empty((N, M), dtype=DTYPEC)
@@ -90,10 +90,11 @@ cpdef _mwt(np.ndarray[data_t, ndim=1] x, np.ndarray[data_t, ndim=1] scales):
             # exponential decay. Allowing 7 sigma implies an error of 1e-13
 
             # We don't want to go outside of the limits:
-            kminus = int_max(tau - 7 * int(s), 1)
-            k_plus = int_min(tau + 7 * int(s), M - 1)
+            int_s = int(s)
+            kminus = int_max(tau - 7 * int_s, 1)
+            k_plus = int_min(tau + 7 * int_s, M - 1)
 
-            for k in xrange(kminus, k_plus):
+            for k in xrange(kminus + 1, k_plus):
                 t_norm = (k - tau) / s
                 integral_sum += morlet_i_c(t_norm, W0) * x[k]
 
@@ -154,7 +155,7 @@ def _rwt(np.ndarray[data_t, ndim=1] x, np.ndarray[data_t, ndim=1] scales):
             kminus = int_max(tau - 8 * int_s, 1)
             k_plus = int_min(tau + 8 * int_s, M - 1)
 
-            for k in xrange(kminus, k_plus):
+            for k in xrange(kminus + 1, k_plus):
                 t_norm = (k - tau) / s
                 integral_sum += ricker(t_norm) * x[k]
 
