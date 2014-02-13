@@ -7,6 +7,7 @@ Interface to obtain wavelet transforms and other measurements.
 '''
 from __future__ import division
 
+import math
 import numpy as np
 from _cwt import _mwt, _rwt
 
@@ -17,8 +18,12 @@ def morlet(t, W0=5.):
     return np.exp(-0.5 * (t ** 2) - 1j * W0 * t)
 
 
-def ricker(t):
-    raise NotImplementedError
+def ricker(t, a):
+    factor = 2/(math.sqrt(3*a) * math.pi**(1/3))
+
+    norm_x = t/a
+    norm_x *= norm_x
+    return factor * (1 - norm_x) * np.exp(-norm_x)
 
 wavel_by_name = {'m': morlet, 'morlet': morlet,
                  'r': ricker, 'ricker': ricker}
@@ -59,7 +64,7 @@ def mwt(x, scales):
 
 
 def rwt(x, scales):
-    '''Perform Morlet wavelet transform
+    '''Perform Ricker wavelet transform
 
     Input:
     -----

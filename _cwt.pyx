@@ -42,6 +42,11 @@ cdef inline DTYPEC_t morlet_i(double t, float W0):
     return exp(-0.5 * (t * t)) * (cos(W0 * t) - 1j * sin(W0 * t))
 
 cdef inline DTYPE_t ricker(double t):
+    '''Inlined Ricker transform. Note that it is missing the normalisation
+    factor 1/sqrt(a); that has been added in _rwt
+
+    t: normalised variable (x/a)
+    '''
     return 2 / (sqrt(3 * sqrt(M_PI))) * (1 - t * t) * exp(-0.5 * t * t)
 
 cdef inline int int_max(int a, int b): return a if a >= b else b
